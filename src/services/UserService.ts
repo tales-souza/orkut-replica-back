@@ -79,6 +79,20 @@ class UserSevice {
 
 
     }
+
+
+    async profile(id: string){
+
+        const profile = prismaClient.user.findUnique({
+            where: {
+                id
+            }
+        });
+
+        return profile;
+
+    }
+
 }
 
 

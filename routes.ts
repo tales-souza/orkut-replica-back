@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { CountrieController } from "./src/controllers/CountrieController";
 import { UserController } from "./src/controllers/UserController";
+import { ensureAuthenticated } from "./src/middlewares/ensureAuthenticated";
 
 
 
@@ -14,6 +15,8 @@ router.get("/api/v1/country", new CountrieController().index);
 
 router.post("/api/v1/register", new UserController().register);
 router.post("/api/v1/login", new UserController().login);
+router.get("/api/v1/profile",  ensureAuthenticated,  new UserController().profile);
+
 
 
 

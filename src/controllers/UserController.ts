@@ -35,6 +35,22 @@ class UserController {
     }
 
 
+    async profile(request: Request, response: Response) {
+        const userSevice = new UserSevice();
+        try {
+            const profile = await userSevice.profile(request.user_id);
+
+            return response.json(profile);
+        } catch (error) {
+            return response.json({
+                erro: error.message
+            });
+        }
+
+
+    }
+
+
 }
 
 export { UserController }
