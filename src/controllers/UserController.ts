@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserSevice } from "../services/UserService";
+import md5 from "md5";
 
 class UserController {
     async register(request: Request, response: Response) {

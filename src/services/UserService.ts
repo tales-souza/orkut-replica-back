@@ -1,5 +1,8 @@
 import { prismaClient } from "../prisma";
 import { sign } from "jsonwebtoken";
+import md5 from "md5";
+
+
 
 
 class UserSevice {
@@ -32,7 +35,7 @@ class UserSevice {
         const user = await prismaClient.user.create({
             data: {
                 email,
-                password,
+                password: md5(password),
                 dt_nascimento,
                 name,
                 last_name,
@@ -52,7 +55,7 @@ class UserSevice {
         let user = await prismaClient.user.findMany({
             where: {
                 email,
-                password
+                password : md5(password)
             },
         })
 
@@ -89,7 +92,17 @@ class UserSevice {
             }
         });
 
-        return profile;
+       const returnProfile = {
+            id: (await profile).id,
+            email: (await profile).email,
+            dt_nascimento: (await profile).email,
+            name: (await profile).name,
+            last_name: (await profile).last_name,
+            sexo: (await profile).sexo,
+            countryId: (await profile).countryId
+        }
+
+        return returnProfile;
 
     }
 
