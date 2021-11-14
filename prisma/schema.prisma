@@ -17,8 +17,8 @@ model Country {
 
 
   Users User[]
-  @@map("countries")
 
+  @@map("countries")
 }
 
 model User {
@@ -29,13 +29,28 @@ model User {
   name          String
   last_name     String
   sexo          String
+  active        Boolean  @default(false)
+
+  country   Country? @relation(fields: [countryId], references: [id])
+  countryId String?
   
-  country       Country? @relation(fields: [countryId], references: [id])
-  countryId     String?
+
+  authorizeToken AuthorizeToken?
+
 
   @@unique([email], name: "sqlite_autoindex_user_email")
-
-
   @@map("users")
+}
+
+model AuthorizeToken {
+  id                String   @id @default(uuid())
+  token             Int
+  dataAuthorization DateTime @default(now())
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId String? // relation scalar field (used in the `@relation` attribute above)
+
+  @@map("authorizeToken")
+
 
 }

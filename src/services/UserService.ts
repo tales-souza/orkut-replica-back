@@ -3,8 +3,6 @@ import { sign } from "jsonwebtoken";
 import md5 from "md5";
 
 
-
-
 class UserSevice {
 
     async register(
@@ -15,6 +13,11 @@ class UserSevice {
         last_name: string,
         sexo: string,
         countryId: string) {
+
+            
+        function getRandomArbitrary(min : number, max : number) : number {
+            return Math.round(Math.random() * (max - min) + min);
+          }
 
 
         // verify email if already exists
@@ -47,7 +50,22 @@ class UserSevice {
             }
         })
 
-        return user;
+
+       const authorizeToken = await prismaClient.authorizeToken.create({
+            data:{
+                token: getRandomArbitrary(100000, 999999),
+                dataAuthorization: new Date(),
+                userId : user.id,
+            }
+        })
+
+        const returnUser = {
+            ...user,
+            activationToken: authorizeToken.token
+
+        }
+
+        return returnUser;
 
     }
 
@@ -58,6 +76,14 @@ class UserSevice {
                 password : md5(password)
             },
         })
+
+
+        // verificar se a conta já está ativa
+
+        if (!user[0].active){
+            throw new Error('User is not validated yet');
+        }
+
 
         if (user.length === 0) {
             throw new Error('User or password is invalid');

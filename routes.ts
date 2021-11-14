@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { CountrieController } from "./src/controllers/CountrieController";
 import { UserController } from "./src/controllers/UserController";
+import { AuthorizeTokenController } from "./src/controllers/AuthorizeTokenController";
+
+
 import { ensureAuthenticated } from "./src/middlewares/ensureAuthenticated";
+
 
 
 
@@ -11,6 +15,8 @@ const router = Router();
 
 router.post("/api/v1/country", new CountrieController().store);
 router.get("/api/v1/country", new CountrieController().index);
+
+router.post("/api/v1/activeAccount",  new AuthorizeTokenController().activeAccount);
 
 
 router.post("/api/v1/register", new UserController().register);
